@@ -84,7 +84,13 @@ section .text
 bits 64
 
 long_mode_start:
-  mov rax, 0xDB59DB41DB4bDB4f
+  mov rax, 0xDB20DB6DDB27DB49
   mov qword [0xb8000], rax
+  mov rax, 0xDB6CDB20DB6EDB69
+  mov qword [0xb8008], rax
+  mov rax, 0xDB20DB67DB6EDB6F
+  mov qword [0xb8010], rax
+  mov rax, 0xDB65DB64DB6FDB6D
+  mov qword [0xb8016], rax
 
   hlt
