@@ -75,3 +75,15 @@ p3_table:
   resb 4096
 p2_table:
   resb 4096
+
+section .rodata
+gdt64:
+  dq 0
+  dq (1<<44) | (1<<47) | (1<<41) | (1<<43) | (1<<53)
+  dq (1<<44) | (1<<47) | (1<<41)
+
+.pointer:
+  dw .pointer - gdt64 - 1
+  dq gdt64
+
+lgdt [gdt64.pointer]
