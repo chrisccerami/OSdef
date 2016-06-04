@@ -47,23 +47,16 @@ start:
   or eax, 1 << 16
   mov cr0, eax
 
-;     size place      thing
-;     |    |          |
-;     V    V          V
-  mov word [0xb8000], 0xDB48 ; H
-  mov word [0xb8002], 0xDB65 ; e
-  mov word [0xb8004], 0xDB6c ; l
-  mov word [0xb8006], 0xDB6c ; l
-  mov word [0xb8008], 0xDB6f ; o
-  mov word [0xb800a], 0xDB2c ; ,
-  mov word [0xb800c], 0xDB20 ;
-  mov word [0xb800e], 0xDB77 ; w
-  mov word [0xb8010], 0xDB6f ; o
-  mov word [0xb8012], 0xDB72 ; r
-  mov word [0xb8014], 0xDB6c ; l
-  mov word [0xb8016], 0xDB64 ; d
-  mov word [0xb8018], 0xDB21 ; !
-  hlt
+  lgdt [gdt64.pointer]
+
+  ; update selectors
+  mov ax, gdt64.data
+  mov ss, ax
+  mov ds, ax
+  mov es, ax
+
+  ; jump to long mode!
+  jmp gdt64.code:long_mode_start
 
 section .bss
 
@@ -79,11 +72,19 @@ p2_table:
 section .rodata
 gdt64:
   dq 0
+.code: equ $ - gdt64
   dq (1<<44) | (1<<47) | (1<<41) | (1<<43) | (1<<53)
+.data: equ $ - gdt64
   dq (1<<44) | (1<<47) | (1<<41)
-
 .pointer:
   dw .pointer - gdt64 - 1
   dq gdt64
 
-lgdt [gdt64.pointer]
+section .text
+bits 64
+
+long_mode_start:
+  mov rax, 0xDB59DB41DB4bDB4f
+  mov qword [0xb8000], rax
+
+  hlt
