@@ -1,0 +1,12 @@
+[package]
+name = "os-def"
+version = "0.1.0"
+authors = ["Chris C Cerami <chrisccerami@gmail.com>"]
+
+[lib]
+crate-type = ["staticlib"]
+
+[profile.release]
+panic = "abort"
+
+[dependencies]

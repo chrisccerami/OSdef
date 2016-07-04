@@ -1,3 +1,4 @@
+extern kmain
 global start
 
 section .text
@@ -56,7 +57,7 @@ start:
   mov es, ax
 
   ; jump to long mode!
-  jmp gdt64.code:long_mode_start
+  jmp gdt64.code:kmain
 
 section .bss
 
@@ -82,15 +83,5 @@ gdt64:
 
 section .text
 bits 64
-
-long_mode_start:
-  mov rax, 0xDB20DB6DDB27DB49 ;  m'I  |  I'm
-  mov qword [0xb8000], rax ; 0
-  mov rax, 0xDB6CDB20DB6EDB69 ; l ni  |  in l
-  mov qword [0xb8008], rax ; 8
-  mov rax, 0xDB20DB67DB6EDB6F ; ong   |  ong
-  mov qword [0xb8010], rax ; 16
-  mov rax, 0xDB65DB64DB6FDB6D ; edom  |  mode
-  mov qword [0xb8018], rax ; 24
 
   hlt
